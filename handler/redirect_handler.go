@@ -9,7 +9,7 @@ import (
 )
 
 type redirectRequest struct {
-	ShortURL string `param:"short_url" validate:"required"`
+	Hash string `param:"hash" validate:"required"`
 }
 
 func RedirectHandler(c echo.Context) error {
@@ -22,7 +22,8 @@ func RedirectHandler(c echo.Context) error {
 		return err
 	}
 
-	url, err := usecase.NewRedirectUseCase(db.DBConn()).Execute(req.ShortURL)
+	url, err := usecase.NewRedirectUseCase(db.DBConn()).Execute(req.Hash)
+	// 500 や 404 ページ作ってリダイレクトした方が良い
 	if err != nil {
 		c.Logger().Errorf("internal server error: %s", err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError, "予期せぬエラーが発生しました")

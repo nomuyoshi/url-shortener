@@ -34,7 +34,7 @@ func main() {
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
 	e.Use(middleware.Logger())
-	e.POST("/api/shorten_url", handler.CreateShortenURLHandler)
-	e.GET("/:short_url", handler.RedirectHandler)
+	e.POST("/api/shorten_url", handler.ShortenURLHandler)
+	e.GET("/:hash", handler.RedirectHandler)
 	e.Logger.Fatal(e.Start(":3000"))
 }

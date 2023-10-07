@@ -13,9 +13,9 @@ func NewRedirectUseCase(db *sql.DB) *redirectUseCase {
 	return &redirectUseCase{db: db}
 }
 
-func (uc *redirectUseCase) Execute(shortURL string) (string, error) {
+func (uc *redirectUseCase) Execute(hash string) (string, error) {
 	var longURL string
-	if err := uc.db.QueryRow("SELECT long_url FROM url_mapping WHERE short_url = ?", shortURL).Scan(&longURL); err != nil {
+	if err := uc.db.QueryRow("SELECT long_url FROM url_mapping WHERE short_hash = ?", hash).Scan(&longURL); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return "", nil
 		}
