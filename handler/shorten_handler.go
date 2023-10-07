@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"math/big"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 
-	"urlshortener/snowflake"
+	"urlshortener/db"
+	"urlshortener/usecase"
 )
 
 // ShortenHandler 短縮URL生成APIのハンドラー
@@ -28,9 +28,12 @@ func CreateShortenURLHandler(c echo.Context) error {
 		return err
 	}
 
-	id := snowflake.SnowFlake().Generate()
-	shortenURL := big.NewInt(int64(id)).Text(62)
-	// TODO DB保存
+	uc := usecase.NewCreateShortenURLUseCase(db.DBConn())
+	shortenURL, err := uc.Execute(req.URL)
+	if err != nil {
+		return err
+	}
+
 	res := shortenResponse{
 		ShortenURL: shortenURL,
 	}
